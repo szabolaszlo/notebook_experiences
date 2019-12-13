@@ -9,17 +9,17 @@ https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1808957?fbclid=IwAR3W10gQ9a
 
 #### Resolve in Ubuntu 18.04 ####
 I have confirmed this by suspending and then checking:
-sudo journalctl | grep "PM: suspend" | tail -2. If the output is
+`sudo journalctl | grep "PM: suspend" | tail -2`. If the output is
 
 PM: suspend entry (s2idle)
 PM: suspend exit
 
-cat /sys/power/mem_sleep showed
+`cat /sys/power/mem_sleep showed`
 
 [s2idle] deep
 
 As a temporary fix, I typed
-echo deep > /sys/power/mem_sleep
+`echo deep > /sys/power/mem_sleep`
 as a root user (sudo -i).
 
 Then the output of cat /sys/power/mem_sleep was
@@ -35,14 +35,14 @@ I have made this permanent by editing
 /etc/default/grub
 
 and replacing
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"`
 with
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mem_sleep_default=deep"
+`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash mem_sleep_default=deep"`
 
-then regenerating my grub configuration (sudo grub-mkconfig -o /boot/grub/grub.cfg).
+then regenerating my grub configuration (`sudo grub-mkconfig -o /boot/grub/grub.cfg`).
 
 This appears to be working with no ill effects.
 
 #### Resolve in POP OS! 18.04 ####
-After running cat /sys/power/mem_sleep my console showed [s2idle] deep.
-Then I run sudo kernelstub -a mem_sleep_default=deep, rebooted and it changed previous command output to s2idle [deep] - and my problem with suspend is now gone.
+After running `cat /sys/power/mem_sleep` my console showed [s2idle] deep.
+Then I run `sudo kernelstub -a mem_sleep_default=deep`, rebooted and it changed previous command output to s2idle [deep] - and my problem with suspend is now gone.
